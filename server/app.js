@@ -53,9 +53,7 @@ export const createApp = () => {
         cors({
             origin: [
                 "http://localhost:3000",
-                // "https://goal2.dev.client.kloudlite.io",
-                "https://goal2.amazing7studios.com",
-                "https://goal2.plaxonic.clients.do-blr1.khost.dev"
+
             ],
             credentials: true,
         })

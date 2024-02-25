@@ -70,13 +70,22 @@ const filterByField = async(query)=>{
 }
 
 
-const countDocs = async(query)=>{
-    const { page = 1, limit = 10 } = query;
+const countDocs = async(reQuery)=>{
+    const { page = 1, limit = 10,status,priority } = reQuery;
+    console.log(status,'status')
+    let query = {};
+    if (status) {
+        query.status = status;
+    }
+
+    if (priority) {
+        query.priority = priority;
+    }
     const pageNumber = parseInt(page);
     const limitNumber = parseInt(limit);
 
        const skip = (pageNumber - 1) * limitNumber;
-       const tasks = await taskModel.find({})
+       const tasks = await taskModel.find(query)
        .skip(skip)
        .limit(limitNumber);
 
@@ -90,6 +99,11 @@ const countDocs = async(query)=>{
     }
 }
 
+const updateTask =async({_id,data})=>{
+    const updatePlan = await taskModel.findByIdAndUpdate({ _id }, { $set: data }, { new: true })
+    return updatePlan
+}
+
 const taskService = {
     addTask,
     getTaskList ,
@@ -97,7 +111,8 @@ const taskService = {
     removeTask,
     searchTasks,
     filterByField ,
-    countDocs
+    countDocs,
+    updateTask
     // login,
 }
 

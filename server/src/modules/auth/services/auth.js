@@ -31,9 +31,15 @@ const doRegister = async (data) => {
 };
 
 
+const findAllUsers = async()=>{
+    const result = await userModel.find({ role: { $ne: 'admin' } });
+     return result
+}
+
 
 const authService = {
     doRegister,
+    findAllUsers
     // login,
 }
 

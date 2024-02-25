@@ -40,7 +40,8 @@ router.delete('/delete/:id', isAutenticated, httpHandler(async (req, res) => {
 }))
 
 // Define route to search tasks by title
-router.get('/search', httpHandler(async (req, res) => {
+router.post('/search', httpHandler(async (req, res) => {
+  console.log(req.body,'body')
    const title = req.body.title
     if (!title) {
         return res.status(400).json({ error: 'Title parameter is required for search' });
@@ -70,9 +71,19 @@ router.get('/search', httpHandler(async (req, res) => {
     }))
 
 
-    router.get('/pagination',isAutenticated,httpHandler(async(req,res)=>{
-        const { page = 1, limit = 10 } = req.query; // Get page and limit query parameters from request
-        const query = {page,limit}
+    router.put('/update/:id',httpHandler(async(req,res)=>{
+
+      const collect = await  taskService.updateTask({_id:req.params.id, data:req.body})
+      if(!collect){
+          return res.status(404).send('No task with such id found')
+      }
+      res.send(collect)
+        //  res.send('hello')
+    }))
+
+    router.get('/pagination',httpHandler(async(req,res)=>{
+        const { page = 1, limit = 10 ,status="",priority=""} = req.query; // Get page and limit query parameters from request
+        const query = {page,limit,status,priority}
          // Convert page and limit to number
        const collect = await taskService.countDocs(query)
        res.send(collect)

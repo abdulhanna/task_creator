@@ -31,4 +31,21 @@ router.get(
     })
 );
 
+router.get('/userList',isAutenticated,httpHandler(async(req,res)=>{
+      const collect = await   authService.findAllUsers(); 
+      
+     if(!collect){
+         return res.status(401).json({msg:"No users found"})
+     }
+     res.send(collect)
+}))
+
+router.post('/logout', isAutenticated, httpHandler(async (req, res) => {
+    // req.logout();
+   
+    req.session.destroy()
+    res.status(200).send({message:'your are logout'})
+
+}))
+
 export default router;
